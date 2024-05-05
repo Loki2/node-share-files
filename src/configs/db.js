@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 // const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:27017/${process.env.DATABASE}?maxPoolSize=2-&w=majority`;
-const uri = "mongodb://localhost:27017"
+const uri = "mongodb://localhost:27017/node-files-share"
 
 const client = new MongoClient(uri);
 

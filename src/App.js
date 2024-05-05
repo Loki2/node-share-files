@@ -5,8 +5,10 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const session = require('express-session');
 
-
 const app = express();
+const port = process.env.PORT;
+
+const mainURL = `http://localhost:${port}`;
 
 //Middle ware
 app.use(express.json());
@@ -30,19 +32,19 @@ app.use(session({
   }
 }));
 
+//import all routers
+const authRouters = require("./routers/authRouter");
+const fileRouters = require("./routers/authRouter");
+const folderRouters = require("./routers/authRouter");
+const shareRouters = require("./routers/authRouter");
 
-// app.use(function (req, result, next) {
-//   req.mainURL = mainURL;
-//   req.isLogin = (typeof req.session.user !== "undefined");
-//   req.user = req.session.user;
+app.use('/auth', authRouters);
 
-//   next();
-// })
+app.use('/files', fileRouters);
 
+app.use('/dirs', folderRouters);
 
-app.get('/', (req, res) => {
-  res.render("index.ejs", { "req": req })
-})
+app.use('/shares', shareRouters);
 
 app.use((err, req, res, next) => {
   const errStatus = err.status || 500;
@@ -54,6 +56,13 @@ app.use((err, req, res, next) => {
     message: errMessage,
     stack: err.stack,
   });
+});
+
+app.use(function (request, result, next) {
+  request.mainURL = mainURL;
+  request.isLogin = (typeof request.session.user !== "undefined");
+  request.user = request.session.user;
+  next();
 });
 
 module.exports = app;
